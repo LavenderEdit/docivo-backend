@@ -367,6 +367,6 @@ Este proyecto está bajo la licencia correspondiente definida por el repositorio
 ---
 
 # 👨‍💻 Autor
-
+Juan S. Pimentel Lalangui
 **Docivo API**  
 Motor de procesamiento documental asíncrono construido para alto rendimiento y escalabilidad.
