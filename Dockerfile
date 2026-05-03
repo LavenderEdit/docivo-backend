@@ -10,6 +10,7 @@ RUN apt-get update && apt-get install -y \
     libtesseract-dev \
     mupdf \
     mupdf-tools \
+    libreoffice \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt .
