@@ -4,6 +4,7 @@ import os
 from fastapi import FastAPI, UploadFile, File, Form, HTTPException
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
+from fastapi.middleware.cors import CORSMiddleware
 from celery.result import AsyncResult
 
 from app.tasks import (
@@ -23,6 +24,18 @@ app = FastAPI(
     title="Docivo API", 
     description="Motor backend para procesamiento avanzado de PDF",
     version="2.0.0"
+)
+
+origins = [
+    "*"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.mount("/api/v1/static", StaticFiles(directory=PROCESSED_DIR), name="static")
@@ -46,7 +59,6 @@ def download_processed_file(job_id: str):
     if task_result.status != "SUCCESS":
         raise HTTPException(status_code=400, detail="El archivo aún no está listo o falló.")
     
-    # Busca dinámicamente cualquier extensión generada (.docx, .pdf, .zip)
     matching_files = list(PROCESSED_DIR.glob(f"{job_id}*.*"))
     if not matching_files:
         raise HTTPException(status_code=404, detail="Archivo no encontrado en el disco.")
